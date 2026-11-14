@@ -37,4 +37,5 @@ dependencies {
     implementation("androidx.compose.ui:ui:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.9.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
+    implementation("androidx.glance:glance-appwidget:1.1.1")
 }

@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">BetterBose</string>
+    <string name="widget_ring">Battery ring</string>
+    <string name="widget_big">Battery level</string>
+    <string name="widget_modebar">Battery and modes</string>
+    <string name="widget_dashboard">Headphones dashboard</string>
+    <string name="widget_mini_battery">Mini battery</string>
+    <string name="widget_mini_modes">Quick modes</string>
 </resources>
