@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BetterBose · logo round 2</title>
+<style>
+  :root { --bg:#f2f2f7; --ink:#111; --sub:#6e6e73; }
+  * { box-sizing:border-box; margin:0; }
+  body { font:15px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Text","Inter",system-ui,sans-serif; background:var(--bg); color:var(--ink); padding:28px 18px 60px; }
+  h1 { font-size:28px; letter-spacing:-.02em; }
+  .lead { color:var(--sub); margin:6px 0 22px; max-width:640px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; }
+  .card { background:#fff; border-radius:22px; padding:18px; }
+  .card h2 { font-size:17px; display:flex; align-items:baseline; gap:8px; }
+  .card h2 span { font-size:13px; color:var(--sub); font-weight:500; }
+  .card p { color:var(--sub); font-size:13px; margin:4px 0 14px; }
+  .shapes { display:flex; gap:14px; align-items:flex-end; }
+  .shape { display:flex; flex-direction:column; align-items:center; gap:6px; font-size:11px; color:var(--sub); }
+  .ic { width:72px; height:72px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.12); }
+  .ic svg { width:100%; height:100%; display:block; }
+  .circle { border-radius:50%; }
+  .squircle { border-radius:22px; }
+  .big { width:108px; height:108px; border-radius:26px; }
+  .home { margin-top:14px; border-radius:16px; padding:16px 10px 12px; display:grid; grid-template-columns:repeat(4,1fr); gap:10px 0;
+          background:linear-gradient(160deg,#5b6b7d,#2c3440 55%,#1b1f26); }
+  .home .app { display:flex; flex-direction:column; align-items:center; gap:5px; color:#fff; font-size:11px; }
+  .home .app .ic { width:48px; height:48px; }
+  .dummy { width:48px; height:48px; border-radius:50%; background:rgba(255,255,255,.18); }
+  .themed { background:linear-gradient(160deg,#e9eef3,#cfd8e2); }
+  .themed .app { color:#1b1f26; }
+  .themed .dummy { background:#c9d6e4; }
+</style>
+</head>
+<body>
+<h1>BetterBose icon, round 2</h1>
+<p class="lead">Twelve directions: six styled headphones (1-6) and six B monograms (7-12). Each shows the Pixel circle, a rounded square, the themed (monochrome) version, and the icon on a dark and a themed home screen. Tell me the number(s) you like, and I can mix them (e.g. "8 in the colours of 5").</p>
+<div class="grid" id="grid"></div>
+
+<template id="logos">
+<svg data-name="Halo" data-sub="sleek headphones" data-desc="A thin headband over two solid D-shaped cups. The cups have the real QC Ultra silhouette, the band stays light." viewBox="0 0 100 100"><rect width="100" height="100" fill="#111"/><path d="M28 60 V52 a22 22 0 0 1 44 0 V60" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" /><path d="M25 55 h5 a3 3 0 0 1 3 3 v15 a3 3 0 0 1 -3 3 h-5 a7 7 0 0 1 -7 -7 v-7 a7 7 0 0 1 7 -7z" fill="#fff"/><path d="M75 55 h-5 a3 3 0 0 0 -3 3 v15 a3 3 0 0 0 3 3 h5 a7 7 0 0 0 7 -7 v-7 a7 7 0 0 0 -7 -7z" fill="#fff"/></svg>
+<svg data-name="Turn" data-sub="three-quarter view" data-desc="Headphones seen slightly from the side: one big cup in front, the far cup smaller and grey. Adds depth while staying flat." viewBox="0 0 100 100"><rect width="100" height="100" fill="#f4f2ee"/><path d="M33 62 V49 a20 20 0 0 1 40 0 V54" fill="none" stroke="#111" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" /><rect x="26" y="57" width="12" height="21" rx="6" fill="#a9a6a1"/><rect x="60" y="50" width="22" height="31" rx="11" fill="#111"/><rect x="66" y="57" width="10" height="17" rx="5" fill="#3a3a3c"/></svg>
+<svg data-name="Line" data-sub="outline" data-desc="The headphones drawn as one even outline, like an SF Symbol. Light and precise on white." viewBox="0 0 100 100"><rect width="100" height="100" fill="#fff"/><path d="M30 56 V50 a20 20 0 0 1 40 0 V56" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" /><path d="M24 60 a6 6 0 0 1 6 -6 h1 a3 3 0 0 1 3 3 v16 a3 3 0 0 1 -3 3 h-1 a6 6 0 0 1 -6 -6z" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" /><path d="M76 60 a6 6 0 0 0 -6 -6 h-1 a3 3 0 0 0 -3 3 v16 a3 3 0 0 0 3 3 h1 a6 6 0 0 0 6 -6z" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" /></svg>
+<svg data-name="Listen" data-sub="headphones + quiet" data-desc="The headphones with the quiet rings between the cups: the Field idea, but now clearly about headphones." viewBox="0 0 100 100"><defs><radialGradient id="l4" cx="50%" cy="40%" r="75%"><stop offset="0" stop-color="#3a3a3e"/><stop offset="1" stop-color="#0c0c0e"/></radialGradient></defs><rect width="100" height="100" fill="url(#l4)"/><path d="M28 58 V50 a22 22 0 0 1 44 0 V58" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" /><rect x="21" y="55" width="12" height="22" rx="6" fill="#fff"/><rect x="67" y="55" width="12" height="22" rx="6" fill="#fff"/><circle cx="50" cy="66" r="13" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width="2.4"/><circle cx="50" cy="66" r="7.5" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="2.4"/><circle cx="50" cy="66" r="3" fill="#fff"/></svg>
+<svg data-name="Studio" data-sub="warm, bold" data-desc="Chunky headphones in dark espresso on the Sandstone colour. Friendly and premium, the most product-like of the set." viewBox="0 0 100 100"><defs><linearGradient id="l5" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#efe7da"/><stop offset="1" stop-color="#d9cbb5"/></linearGradient></defs><rect width="100" height="100" fill="url(#l5)"/><path d="M29 60 V50 a21 21 0 0 1 42 0 V60" fill="none" stroke="#2b211a" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" /><rect x="20" y="53" width="17" height="26" rx="8.5" fill="#2b211a"/><rect x="63" y="53" width="17" height="26" rx="8.5" fill="#2b211a"/></svg>
+<svg data-name="Pulse" data-sub="colour" data-desc="The Halo headphones in white on a blue-violet gradient. Stands out on any home screen." viewBox="0 0 100 100"><defs><linearGradient id="l6" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2f80ff"/><stop offset="1" stop-color="#6a4cff"/></linearGradient></defs><rect width="100" height="100" fill="url(#l6)"/><path d="M28 60 V52 a22 22 0 0 1 44 0 V60" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" /><path d="M25 55 h5 a3 3 0 0 1 3 3 v15 a3 3 0 0 1 -3 3 h-5 a7 7 0 0 1 -7 -7 v-7 a7 7 0 0 1 7 -7z" fill="#fff"/><path d="M75 55 h-5 a3 3 0 0 0 -3 3 v15 a3 3 0 0 0 3 3 h5 a7 7 0 0 0 7 -7 v-7 a7 7 0 0 0 -7 -7z" fill="#fff"/></svg>
+<svg data-name="Mirror" data-sub="two Bs back to back" data-desc="A B and its mirror share one spine. The bowls read as two earcups, the whole thing as a butterfly or headphones seen from above." viewBox="0 0 100 100"><rect width="100" height="100" fill="#111"/><path d="M50 28 V72" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" /><path d="M50 28 h9 a10 10 0 0 1 0 20 h-9 M50 48 h11 a12 12 0 0 1 0 24 h-11" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" /><path d="M50 28 h-9 a10 10 0 0 0 0 20 h9 M50 48 h-11 a12 12 0 0 0 0 24 h11" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+<svg data-name="Twin b" data-sub="bb as headphones" data-desc="Two lowercase b, one mirrored, their stems joined by a headband. Reads as bb and as headphones at the same time." viewBox="0 0 100 100"><rect width="100" height="100" fill="#111"/><path d="M30 72 V46 a20 20 0 0 1 40 0 V72" fill="none" stroke="#fff" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" /><circle cx="39" cy="64" r="8" fill="none" stroke="#fff" stroke-width="6.5"/><circle cx="61" cy="64" r="8" fill="none" stroke="#fff" stroke-width="6.5"/></svg>
+<svg data-name="Bend" data-sub="a B turned sideways" data-desc="A B rotated a quarter turn: the spine becomes the headband and the two bowls hang like earcups." viewBox="0 0 100 100"><rect width="100" height="100" fill="#f4f2ee"/><path d="M24 36 H76" fill="none" stroke="#111" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" /><path d="M24 36 v14 a13 13 0 0 0 26 0 v-14" fill="none" stroke="#111" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" /><path d="M50 36 v16 a13 13 0 0 0 26 0 v-16" fill="none" stroke="#111" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+<svg data-name="BB" data-sub="wordmark" data-desc="Just the letters, heavy and tight, the second B dimmed: Better, then Bose. Simple and very typographic." viewBox="0 0 100 100"><rect width="100" height="100" fill="#111"/><text x="50" y="66" text-anchor="middle" font-family="Inter, SF Pro Display, Helvetica Neue, Arial, sans-serif" font-weight="800" font-size="46" letter-spacing="-3" fill="#fff">B<tspan fill-opacity=".38">B</tspan></text></svg>
+<svg data-name="Capsule" data-sub="solid B" data-desc="A solid geometric B built from two capsules, with the counters as small dots. Feels like a little product, close to an earbud case." viewBox="0 0 100 100"><rect width="100" height="100" fill="#111"/><rect x="31" y="26" width="10" height="48" rx="3" fill="#fff"/><rect x="31" y="26" width="32" height="23" rx="11.5" fill="#fff"/><rect x="31" y="51" width="38" height="23" rx="11.5" fill="#fff"/><circle class="cut" cx="50" cy="37.5" r="4" fill="#111"/><circle class="cut" cx="54" cy="62.5" r="4.5" fill="#111"/></svg>
+<svg data-name="Quiet b" data-sub="b with the quiet dot" data-desc="A lowercase b whose bowl is a ring with a bright core, borrowing the Field look you picked before." viewBox="0 0 100 100"><defs><radialGradient id="l12" cx="50%" cy="40%" r="75%"><stop offset="0" stop-color="#3a3a3e"/><stop offset="1" stop-color="#0c0c0e"/></radialGradient></defs><rect width="100" height="100" fill="url(#l12)"/><path d="M36 24 V74" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" /><circle cx="52" cy="58" r="16" fill="none" stroke="#fff" stroke-width="7"/><circle cx="52" cy="58" r="5" fill="#fff"/></svg>
+</template>
+
+<script>
+const tpl = document.getElementById('logos').content.querySelectorAll('svg');
+const grid = document.getElementById('grid');
+const mono = svg => { // themed icon: glyph only, tinted
+  const c = svg.cloneNode(true);
+  c.querySelectorAll('defs').forEach(d => d.remove());
+  const bg = c.querySelector('rect'); bg.setAttribute('fill', '#c9d6e4');
+  c.querySelectorAll('*').forEach((el, i) => {
+    if (el === bg) return;
+    if (el.classList && el.classList.contains('cut')) { el.setAttribute('fill', '#c9d6e4'); return; }
+    ['fill','stroke'].forEach(a => { const v = el.getAttribute(a); if (v && v !== 'none') el.setAttribute(a, '#2b4a66'); });
+  });
+  return c;
+};
+tpl.forEach((svg, i) => {
+  const card = document.createElement('div'); card.className = 'card';
+  card.innerHTML = `<h2>${i+1}. ${svg.dataset.name} <span>${svg.dataset.sub}</span></h2><p>${svg.dataset.desc}</p>`;
+  const shapes = document.createElement('div'); shapes.className = 'shapes';
+  const add = (cls, label, node) => {
+    const s = document.createElement('div'); s.className = 'shape';
+    const ic = document.createElement('div'); ic.className = 'ic ' + cls; ic.appendChild(node);
+    s.appendChild(ic); s.insertAdjacentHTML('beforeend', label); shapes.appendChild(s);
+  };
+  add('circle big', 'Pixel', svg.cloneNode(true));
+  add('squircle', 'Rounded', svg.cloneNode(true));
+  add('circle', 'Themed', mono(svg));
+  card.appendChild(shapes);
+  for (const themed of [false, true]) {
+    const home = document.createElement('div'); home.className = 'home' + (themed ? ' themed' : '');
+    for (let k = 0; k < 4; k++) {
+      const a = document.createElement('div'); a.className = 'app';
+      if (k === 1) { const ic = document.createElement('div'); ic.className = 'ic circle'; ic.appendChild(themed ? mono(svg) : svg.cloneNode(true)); a.appendChild(ic); a.insertAdjacentHTML('beforeend','BetterBose'); }
+      else a.innerHTML = `<div class="dummy"></div>${['Maps','','Music','Camera'][k]}`;
+      home.appendChild(a);
+    }
+    card.appendChild(home);
+  }
+  grid.appendChild(card);
+});
+</script>
+</body>
+</html>

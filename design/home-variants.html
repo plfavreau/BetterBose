@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bose Control · home screen variants</title>
+<style>
+  :root { --ui: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", Roboto, system-ui, sans-serif; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; background: #e9e9ee; font-family: var(--ui); color: #111; }
+  body { padding: 20px 0 60px; }
+  .top { max-width: 1700px; margin: 0 auto 18px; padding: 0 20px; }
+  .top h1 { font-size: 22px; letter-spacing: -.02em; margin: 0 0 4px; }
+  .top p { margin: 0 0 14px; color: #666; font-size: 14px; line-height: 1.45; }
+  .states { display: inline-flex; background: #fff; border-radius: 12px; padding: 4px; gap: 2px; box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+  .states button { border: 0; background: none; font: 500 13px var(--ui); padding: 8px 12px; border-radius: 9px; color: #555; cursor: pointer; }
+  .states button.on { background: #111; color: #fff; }
+  .grid { display: flex; flex-wrap: wrap; gap: 28px; justify-content: center; padding: 0 12px; }
+  figure { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  figcaption { font: 600 14px var(--ui); color: #333; text-align: center; }
+  figcaption small { display: block; font-weight: 400; color: #777; margin-top: 2px; max-width: 360px; }
+
+  /* ---------- phone shell ---------- */
+  .phone { width: 375px; height: 812px; border-radius: 46px; overflow: hidden; position: relative;
+    box-shadow: 0 0 0 10px #1b1b1d, 0 0 0 11px #3a3a3e, 0 30px 60px rgba(0,0,0,.25); }
+  .screen { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; scrollbar-width: none; }
+  .screen::-webkit-scrollbar { display: none; }
+  .sbar { height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 26px; font: 600 14px var(--ui); }
+  .when-connecting, .when-off { display: none !important; }
+  .phone.st-connecting .when-connected, .phone.st-off .when-connected { display: none !important; }
+  .phone.st-connecting .when-connecting { display: flex !important; }
+  .phone.st-off .when-off { display: flex !important; }
+  .low-only { display: none !important; }
+  .phone.st-low .low-only { display: flex !important; }
+
+  /* shared controls */
+  input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; background: transparent; height: 30px; margin: 0; }
+  input[type=range]:focus { outline: none; }
+  .tog { width: 46px; height: 28px; border-radius: 99px; position: relative; flex: none; cursor: pointer; transition: background .2s; }
+  .tog::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .22s cubic-bezier(.3,.7,.4,1); }
+  .tog.on::after { transform: translateX(18px); }
+  @keyframes pulse { 0%,100% { opacity: .45 } 50% { opacity: 1 } }
+  @keyframes spin { to { transform: rotate(360deg) } }
+  @keyframes floaty { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-6px) } }
+  .shimmer { animation: pulse 1.4s ease-in-out infinite; }
+
+  /* =========================================================
+     A · PURE (Apple light)
+     ========================================================= */
+  .A { background: #f2f2f7; color: #111; }
+  .A .head { padding: 6px 22px 0; display: flex; justify-content: space-between; align-items: flex-start; }
+  .A .head h2 { font-size: 30px; letter-spacing: -.03em; margin: 0; font-weight: 700; }
+  .A .head .sub { color: #8a8a8f; font-size: 14px; margin-top: 2px; display: flex; gap: 6px; align-items: center; }
+  .A .dot { width: 7px; height: 7px; border-radius: 50%; background: #34c759; }
+  .A .gear { width: 36px; height: 36px; border-radius: 50%; background: #fff; display: grid; place-items: center; box-shadow: 0 1px 2px rgba(0,0,0,.05); }
+  .A .hero { position: relative; height: 270px; display: flex; justify-content: center; align-items: center; }
+  .A .hero img { height: 230px; filter: drop-shadow(0 24px 22px rgba(0,0,0,.18)); }
+  .A .batt { position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); background: #fff; border-radius: 99px; padding: 7px 14px 7px 10px; display: flex; gap: 8px; align-items: center; font: 600 14px var(--ui); box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+  .A .bico { width: 26px; height: 13px; border: 1.6px solid #b9b9bf; border-radius: 4px; position: relative; padding: 1.5px; }
+  .A .bico::after { content: ""; position: absolute; right: -4px; top: 3px; width: 2px; height: 5px; background: #b9b9bf; border-radius: 0 2px 2px 0; }
+  .A .bico i { display: block; height: 100%; border-radius: 2px; background: #34c759; }
+  .A .warn { margin: 12px 18px 0; background: #fff4e5; color: #9a5b00; border-radius: 14px; padding: 10px 14px; font-size: 13px; gap: 8px; align-items: center; }
+  .A .sec { margin: 22px 18px 0; }
+  .A .lbl { font-size: 13px; color: #8a8a8f; font-weight: 500; margin: 0 4px 8px; display: flex; justify-content: space-between; }
+  .A .modes { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 2px 2px 4px; margin: 0 -18px; padding-left: 18px; padding-right: 18px; }
+  .A .mode { flex: none; background: #fff; border-radius: 18px; padding: 14px 14px 12px; width: 92px; cursor: pointer; transition: all .2s; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+  .A .mode svg { display: block; margin-bottom: 18px; }
+  .A .mode b { font-size: 14px; font-weight: 600; display: block; }
+  .A .mode.on { background: #111; color: #fff; }
+  .A .card { background: #fff; border-radius: 20px; padding: 16px 18px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+  .A .row { display: flex; align-items: center; justify-content: space-between; }
+  .A .row + .row { border-top: 1px solid #efeff4; margin-top: 12px; padding-top: 12px; }
+  .A .row span { font-size: 15px; }
+  .A .row em { font-style: normal; color: #8a8a8f; font-size: 14px; }
+  .A input[type=range]::-webkit-slider-runnable-track { height: 6px; border-radius: 9px; background: linear-gradient(90deg, #111 var(--p,50%), #e5e5ea var(--p,50%)); }
+  .A input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px; height: 26px; border-radius: 50%; background: #fff; margin-top: -10px; box-shadow: 0 2px 8px rgba(0,0,0,.2), 0 0 0 .5px rgba(0,0,0,.08); }
+  .A input[type=range]::-moz-range-track { height: 6px; border-radius: 9px; background: #e5e5ea; }
+  .A input[type=range]::-moz-range-progress { height: 6px; border-radius: 9px; background: #111; }
+  .A input[type=range]::-moz-range-thumb { width: 26px; height: 26px; border-radius: 50%; background: #fff; border: 0; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
+  .A .ends { display: flex; justify-content: space-between; font-size: 12px; color: #a0a0a6; margin-top: 2px; }
+  .A .seg { display: flex; background: #eeeef0; border-radius: 11px; padding: 3px; }
+  .A .seg button { flex: 1; border: 0; background: none; font: 500 14px var(--ui); padding: 8px 0; border-radius: 9px; color: #333; cursor: pointer; }
+  .A .seg button.on { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.12); font-weight: 600; }
+  .A .eqr { display: grid; grid-template-columns: 56px 1fr 30px; gap: 10px; align-items: center; font-size: 14px; color: #555; }
+  .A .eqr em { font-style: normal; text-align: right; font-weight: 600; color: #111; font-variant-numeric: tabular-nums; }
+  .A .eq { display: flex; gap: 14px; align-items: flex-end; height: 150px; padding: 6px 4px 0; }
+  .A .band { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .A .band .v { font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .A .band small { color: #8a8a8f; font-size: 12px; }
+  .A .vr { writing-mode: vertical-lr; direction: rtl; width: 30px; height: 100px; }
+  .A .vr::-webkit-slider-runnable-track { width: 6px !important; height: auto; background: linear-gradient(0deg, #e5e5ea 0, #e5e5ea 100%); }
+  .A .vr::-webkit-slider-thumb { margin-top: 0; margin-left: -10px; }
+  .A .tog { background: #e5e5ea; } .A .tog.on { background: #34c759; }
+  .A .chev { color: #c4c4c8; }
+  .A .empty { flex-direction: column; align-items: center; text-align: center; padding: 40px 34px 0; }
+  .A .empty img { height: 200px; opacity: .35; filter: grayscale(1); margin-bottom: 26px; }
+  .A .empty h3 { font-size: 22px; margin: 0 0 6px; letter-spacing: -.02em; }
+  .A .empty p { color: #8a8a8f; margin: 0 0 24px; font-size: 15px; line-height: 1.4; }
+  .A .btn { border: 0; background: #111; color: #fff; font: 600 16px var(--ui); padding: 14px 26px; border-radius: 99px; cursor: pointer; }
+  .A .connecting { flex-direction: column; align-items: center; padding-top: 60px; }
+  .A .connecting img { height: 220px; animation: floaty 2.6s ease-in-out infinite; filter: drop-shadow(0 24px 22px rgba(0,0,0,.15)); }
+  .A .connecting .cap { margin-top: 28px; display: flex; gap: 10px; align-items: center; color: #555; font-size: 15px; }
+  .A .spin { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #ccc; border-top-color: #111; animation: spin .8s linear infinite; }
+  .A .skel { width: 300px; margin-top: 34px; display: flex; flex-direction: column; gap: 10px; }
+  .A .skel i { height: 56px; border-radius: 16px; background: #e6e6eb; display: block; }
+
+  /* =========================================================
+     B · MIDNIGHT (OpenAI dark, typographic)
+     ========================================================= */
+  .B { background: #000; color: #f4f4f4; }
+  .B .sbar { color: #fff; }
+  .B .top2 { display: flex; justify-content: space-between; align-items: center; padding: 6px 22px; font-size: 14px; color: #8d8d8d; }
+  .B .pill { display: flex; gap: 8px; align-items: center; border: 1px solid #262626; border-radius: 99px; padding: 6px 12px; color: #d8d8d8; }
+  .B .pill i { width: 6px; height: 6px; border-radius: 50%; background: #e6e6e6; box-shadow: 0 0 10px rgba(255,255,255,.6); }
+  .B .hero { position: relative; height: 300px; display: flex; justify-content: center; align-items: center; }
+  .B .hero::before { content: ""; position: absolute; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, rgba(232,220,200,.16), transparent 65%); }
+  .B .hero img { height: 250px; position: relative; }
+  .B .big { padding: 0 24px; }
+  .B .big .k { font-size: 13px; color: #7a7a7a; letter-spacing: .02em; }
+  .B .big h2 { font-size: 46px; letter-spacing: -.045em; font-weight: 600; margin: 2px 0 0; line-height: 1; }
+  .B .big .meta { display: flex; gap: 18px; margin-top: 12px; color: #9a9a9a; font-size: 14px; }
+  .B .big .meta b { color: #fff; font-weight: 500; }
+  .B .low { color: #ffb86b !important; }
+  .B .modes { display: flex; gap: 8px; padding: 22px 24px 0; flex-wrap: wrap; }
+  .B .mode { border: 1px solid #2a2a2a; color: #cfcfcf; background: none; font: 500 14px var(--ui); padding: 10px 16px; border-radius: 99px; cursor: pointer; transition: all .2s; }
+  .B .mode.on { background: #f4f4f4; color: #000; border-color: #f4f4f4; }
+  .B .hr { height: 1px; background: #1c1c1c; margin: 26px 24px 0; }
+  .B .blk { padding: 22px 24px 0; }
+  .B .blk .t { display: flex; justify-content: space-between; font-size: 15px; margin-bottom: 12px; }
+  .B .blk .t em { font-style: normal; color: #7a7a7a; font-variant-numeric: tabular-nums; }
+  .B .ticks { display: flex; gap: 4px; height: 34px; align-items: flex-end; cursor: pointer; }
+  .B .ticks i { flex: 1; background: #2a2a2a; border-radius: 3px; height: 40%; transition: all .15s; }
+  .B .ticks i.on { background: #f4f4f4; }
+  .B .seg { display: grid; grid-template-columns: repeat(3,1fr); border: 1px solid #262626; border-radius: 14px; overflow: hidden; }
+  .B .seg button { background: none; border: 0; color: #9a9a9a; font: 500 14px var(--ui); padding: 12px 0; cursor: pointer; }
+  .B .seg button + button { border-left: 1px solid #262626; }
+  .B .seg button.on { background: #161616; color: #fff; }
+  .B .eqrow { display: grid; grid-template-columns: 64px 1fr 34px; align-items: center; gap: 10px; font-size: 14px; color: #bdbdbd; }
+  .B .eqrow + .eqrow { margin-top: 6px; }
+  .B .eqrow em { font-style: normal; text-align: right; color: #fff; font-variant-numeric: tabular-nums; }
+  .B input[type=range]::-webkit-slider-runnable-track { height: 2px; background: #2e2e2e; }
+  .B input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: #f4f4f4; margin-top: -8px; }
+  .B input[type=range]::-moz-range-track { height: 2px; background: #2e2e2e; }
+  .B input[type=range]::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: #f4f4f4; border: 0; }
+  .B .list .it { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid #161616; font-size: 15px; }
+  .B .list .it em { font-style: normal; color: #7a7a7a; font-size: 14px; }
+  .B .tog { background: #2a2a2a; } .B .tog.on { background: #f4f4f4; } .B .tog.on::after { background: #000; }
+  .B .center { flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 70px 30px 0; }
+  .B .center img { height: 220px; }
+  .B .center h3 { font-size: 28px; letter-spacing: -.03em; margin: 26px 0 8px; font-weight: 600; }
+  .B .center p { color: #8a8a8a; margin: 0 0 26px; font-size: 15px; line-height: 1.45; }
+  .B .btn { background: #f4f4f4; color: #000; border: 0; font: 600 15px var(--ui); padding: 13px 24px; border-radius: 99px; cursor: pointer; }
+  .B .breath { animation: pulse 1.8s ease-in-out infinite; }
+
+  /* =========================================================
+     C · TILES (Control-Center grid)
+     ========================================================= */
+  .C { background: radial-gradient(120% 70% at 50% 0%, #2b2e36 0%, #121317 55%, #0b0b0d 100%); color: #fff; }
+  .C .sbar { color: #fff; }
+  .C .head { padding: 4px 20px 14px; display: flex; align-items: center; gap: 12px; }
+  .C .head img { width: 54px; height: 54px; object-fit: contain; }
+  .C .head h2 { margin: 0; font-size: 19px; letter-spacing: -.02em; }
+  .C .head small { color: rgba(255,255,255,.55); font-size: 13px; }
+  .C .g { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 16px; }
+  .C .t { background: rgba(255,255,255,.08); border-radius: 26px; padding: 16px; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,.06); }
+  .C .t .h { font-size: 13px; color: rgba(255,255,255,.6); margin-bottom: 8px; }
+  .C .wide { grid-column: span 2; }
+  .C .batt { display: flex; align-items: center; gap: 14px; }
+  .C .ring { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; background: conic-gradient(#ff9f0a calc(var(--b) * 1%), rgba(255,255,255,.12) 0); position: relative; }
+  .C .ring::before { content: ""; position: absolute; inset: 6px; border-radius: 50%; background: #1b1c21; }
+  .C .ring b { position: relative; font-size: 16px; }
+  .C .modes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .C .mode { border: 0; background: rgba(255,255,255,.08); color: #fff; border-radius: 16px; padding: 12px 0 10px; display: flex; flex-direction: column; align-items: center; gap: 8px; font: 500 11px var(--ui); cursor: pointer; transition: all .2s; }
+  .C .mode.on { background: #fff; color: #000; }
+  .C .vslider { height: 170px; border-radius: 26px; background: rgba(255,255,255,.1); position: relative; overflow: hidden; cursor: ns-resize; }
+  .C .vslider .fill { position: absolute; left: 0; right: 0; bottom: 0; background: #fff; transition: height .12s; }
+  .C .vslider .ic { position: absolute; bottom: 14px; left: 0; right: 0; text-align: center; mix-blend-mode: difference; font: 600 13px var(--ui); }
+  .C .tile-sq { display: flex; flex-direction: column; justify-content: space-between; min-height: 170px; }
+  .C .seg3 { display: flex; flex-direction: column; gap: 6px; }
+  .C .seg3 button { border: 0; background: rgba(255,255,255,.08); color: #fff; font: 500 14px var(--ui); padding: 11px 12px; border-radius: 14px; text-align: left; cursor: pointer; display: flex; justify-content: space-between; }
+  .C .seg3 button.on { background: #0a84ff; }
+  .C .eqb { display: flex; gap: 10px; }
+  .C .eqb .col { flex: 1; text-align: center; font-size: 12px; color: rgba(255,255,255,.6); }
+  .C .eqb .vs { height: 110px; border-radius: 18px; background: rgba(255,255,255,.1); position: relative; overflow: hidden; margin-bottom: 6px; cursor: ns-resize; }
+  .C .eqb .vs .fill { position: absolute; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,.9); }
+  .C .eqb .vs .mid { position: absolute; left: 10px; right: 10px; top: 50%; height: 1px; background: rgba(0,0,0,.25); }
+  .C .chip { display: flex; gap: 10px; align-items: center; }
+  .C .chip .ico { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.12); flex: none; transition: background .2s; }
+  .C .chip.on .ico { background: #30d158; }
+  .C .chip b { display: block; font-size: 14px; font-weight: 600; }
+  .C .chip small { color: rgba(255,255,255,.55); font-size: 12px; }
+  .C .center { flex-direction: column; align-items: center; text-align: center; padding: 90px 28px 0; }
+  .C .center img { height: 190px; }
+  .C .center h3 { font-size: 24px; margin: 24px 0 6px; letter-spacing: -.02em; }
+  .C .center p { color: rgba(255,255,255,.6); margin: 0 0 24px; font-size: 15px; }
+  .C .btn { background: #fff; color: #000; border: 0; font: 600 15px var(--ui); padding: 13px 24px; border-radius: 99px; cursor: pointer; }
+  .C .warn { background: rgba(255,159,10,.15); color: #ffb340; border-radius: 16px; padding: 10px 14px; margin: 0 16px 12px; font-size: 13px; gap: 8px; align-items: center; }
+
+  /* =========================================================
+     D · DIAL (single focus + bottom sheet)
+     ========================================================= */
+  .D { background: linear-gradient(180deg, #f7f5f0 0%, #ece8df 100%); color: #1d1b17; }
+  .D .head { text-align: center; padding: 0 20px; }
+  .D .head small { color: #8b857a; font-size: 13px; letter-spacing: .02em; }
+  .D .head h2 { margin: 2px 0 0; font-size: 17px; font-weight: 600; }
+  .D .dial { position: relative; width: 300px; height: 300px; margin: 18px auto 0; }
+  .D .dial svg { position: absolute; inset: 0; }
+  .D .dial img { position: absolute; inset: 52px; width: 196px; height: 196px; object-fit: contain; filter: drop-shadow(0 18px 18px rgba(60,40,10,.16)); }
+  .D .dial .pct { position: absolute; left: 0; right: 0; bottom: -6px; text-align: center; font: 600 13px var(--ui); color: #8b857a; }
+  .D .mname { text-align: center; margin-top: 26px; }
+  .D .mname h3 { font-size: 34px; letter-spacing: -.035em; margin: 0; font-weight: 650; }
+  .D .mname p { margin: 4px 0 0; color: #8b857a; font-size: 14px; }
+  .D .wheel { display: flex; justify-content: center; gap: 10px; margin-top: 18px; }
+  .D .wheel button { width: 54px; height: 54px; border-radius: 50%; border: 0; background: rgba(255,255,255,.7); display: grid; place-items: center; cursor: pointer; transition: all .2s; box-shadow: 0 1px 2px rgba(0,0,0,.05); color: #1d1b17; }
+  .D .wheel button.on { background: #1d1b17; color: #f7f5f0; transform: scale(1.08); }
+  .D .sheet { margin-top: 26px; background: #fff; border-radius: 30px 30px 0 0; padding: 10px 20px 40px; box-shadow: 0 -8px 30px rgba(60,40,10,.08); min-height: 300px; }
+  .D .grab { width: 38px; height: 5px; border-radius: 9px; background: #e2ddd3; margin: 0 auto 16px; }
+  .D .srow { display: flex; justify-content: space-between; align-items: center; padding: 13px 0; border-bottom: 1px solid #f1ede6; font-size: 15px; }
+  .D .srow em { font-style: normal; color: #8b857a; font-size: 14px; }
+  .D input[type=range]::-webkit-slider-runnable-track { height: 4px; border-radius: 9px; background: linear-gradient(90deg, #1d1b17 var(--p,50%), #ece7de var(--p,50%)); }
+  .D input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: #1d1b17; margin-top: -9px; border: 3px solid #fff; box-shadow: 0 1px 5px rgba(0,0,0,.2); }
+  .D input[type=range]::-moz-range-track { height: 4px; background: #ece7de; border-radius: 9px; }
+  .D input[type=range]::-moz-range-progress { height: 4px; background: #1d1b17; border-radius: 9px; }
+  .D input[type=range]::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: #1d1b17; border: 3px solid #fff; }
+  .D .seg { display: flex; gap: 6px; }
+  .D .seg button { flex: 1; border: 1px solid #ece7de; background: none; border-radius: 12px; font: 500 13px var(--ui); padding: 9px 0; color: #5b564d; cursor: pointer; }
+  .D .seg button.on { background: #1d1b17; color: #fff; border-color: #1d1b17; }
+  .D .tog { background: #e7e2d8; } .D .tog.on { background: #1d1b17; }
+  .D .center { flex-direction: column; align-items: center; text-align: center; padding: 60px 30px 0; }
+  .D .center h3 { font-size: 26px; letter-spacing: -.03em; margin: 24px 0 6px; }
+  .D .center p { color: #8b857a; margin: 0 0 24px; font-size: 15px; }
+  .D .btn { background: #1d1b17; color: #fff; border: 0; font: 600 15px var(--ui); padding: 13px 24px; border-radius: 99px; cursor: pointer; }
+</style>
+</head>
+<body>
+<div class="top">
+  <h1>Bose Control · home screen</h1>
+  <p>Four directions for the main screen. Everything is tappable: modes, sliders, toggles. Use the switch to preview the connecting and not-connected states, plus the low battery warning (your headset is at 10% right now). Headphone renders and the icon were generated for this mockup; no Bose logo is used.</p>
+  <div class="states" id="states">
+    <button class="on" data-st="st-connected">Connected</button>
+    <button data-st="st-connected st-low">Low battery</button>
+    <button data-st="st-connecting">Connecting</button>
+    <button data-st="st-off">Not connected</button>
+  </div>
+</div>
+
+<div class="grid">
+
+<!-- ================= A ================= -->
+<figure>
+<div class="phone A st-connected">
+ <div class="screen">
+  <div class="sbar"><span>15:42</span><span>5G ▮▮▮</span></div>
+
+  <div class="when-connected" style="display:block">
+   <div class="head">
+    <div><h2>QC Ultra</h2><div class="sub"><span class="dot"></span>Connected · Pixel</div></div>
+    <div class="gear"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></div>
+   </div>
+   <div class="hero">
+    <img src="assets/hp-black.webp" alt="">
+    <div class="batt"><span class="bico"><i data-battfill style="width:72%"></i></span><span data-batt>72%</span></div>
+   </div>
+   <div class="warn low-only">⚡ Battery at 10%. About 2 hours left.</div>
+
+   <div class="sec">
+    <div class="lbl"><span>Mode</span></div>
+    <div class="modes seg-group" data-target="modeA">
+     <div class="mode on" data-v="Quiet"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M12 7a5 5 0 1 0 5 5"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg><b>Quiet</b></div>
+     <div class="mode" data-v="Aware"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><b>Aware</b></div>
+     <div class="mode" data-v="Immersion"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg><b>Immersion</b></div>
+     <div class="mode" data-v="Cinema"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8"/></svg><b>Cinema</b></div>
+     <div class="mode" data-v="Focus"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg><b>Focus</b></div>
+    </div>
+   </div>
+
+   <div class="sec card">
+    <div class="lbl" style="margin:0 0 4px"><span style="color:#111;font-size:15px">Noise cancellation</span><span data-out="ncA">Max</span></div>
+    <input type="range" min="0" max="10" value="10" data-range="ncA" data-fmt="nc">
+    <div class="ends"><span>Aware</span><span>Quiet</span></div>
+   </div>
+
+   <div class="sec">
+    <div class="lbl"><span>Immersive audio</span></div>
+    <div class="seg seg-group"><button class="on">Off</button><button>Still</button><button>Motion</button></div>
+   </div>
+
+   <div class="sec card">
+    <div class="lbl" style="margin:0 0 10px"><span style="color:#111;font-size:15px">Equalizer</span><span style="color:#007aff">Reset</span></div>
+    <div class="eqr"><span>Bass</span><input type="range" min="-10" max="10" value="0" data-range="b1" data-fmt="eq"><em data-out="b1">0</em></div>
+    <div class="eqr"><span>Mid</span><input type="range" min="-10" max="10" value="0" data-range="b2" data-fmt="eq"><em data-out="b2">0</em></div>
+    <div class="eqr"><span>Treble</span><input type="range" min="-10" max="10" value="0" data-range="b3" data-fmt="eq"><em data-out="b3">0</em></div>
+   </div>
+
+   <div class="sec card" style="margin-bottom:40px">
+    <div class="row"><span>Multipoint</span><div class="tog on"></div></div>
+    <div class="row"><span>Pause when removed</span><div class="tog on"></div></div>
+    <div class="row"><span>Wind block</span><div class="tog"></div></div>
+    <div class="row"><span>Shortcut button</span><em>Modes ›</em></div>
+    <div class="row"><span>Devices</span><em>2 connected ›</em></div>
+   </div>
+  </div>
+
+  <div class="when-connecting connecting">
+   <img src="assets/hp-black.webp" alt="">
+   <div class="cap"><span class="spin"></span>Connecting to QC Ultra…</div>
+   <div class="skel"><i class="shimmer"></i><i class="shimmer"></i><i class="shimmer"></i></div>
+  </div>
+
+  <div class="when-off empty">
+   <img src="assets/hp-black.webp" alt="">
+   <h3>Headphones not connected</h3>
+   <p>Turn them on and they'll show up here automatically. No need to re-pair.</p>
+   <button class="btn">Connect</button>
+  </div>
+ </div>
+</div>
+<figcaption>A · Pure<small>Apple-style light. Product hero, battery pill, mode cards, then everything as clean white cards.</small></figcaption>
+</figure>
+
+<!-- ================= B ================= -->
+<figure>
+<div class="phone B st-connected">
+ <div class="screen">
+  <div class="sbar"><span>15:42</span><span>5G ▮▮▮</span></div>
+
+  <div class="when-connected" style="display:block">
+   <div class="top2"><span>QC Ultra 2</span><span class="pill"><i></i>Connected</span></div>
+   <div class="hero"><img src="assets/hp-sand.webp" alt=""></div>
+   <div class="big">
+    <div class="k">MODE</div>
+    <h2 data-bind="modeB">Quiet</h2>
+    <div class="meta"><span>Battery <b data-batt>72%</b></span><span>Noise <b data-out="ncB">10</b></span><span>Volume <b>9</b></span></div>
+    <div class="meta low-only low" style="margin-top:8px">Low battery. Charge soon.</div>
+   </div>
+   <div class="modes seg-group" data-bindto="modeB">
+    <button class="mode on" data-v="Quiet">Quiet</button>
+    <button class="mode" data-v="Aware">Aware</button>
+    <button class="mode" data-v="Immersion">Immersion</button>
+    <button class="mode" data-v="Cinema">Cinema</button>
+    <button class="mode" data-v="Focus">Focus</button>
+   </div>
+   <div class="hr"></div>
+   <div class="blk">
+    <div class="t"><span>Noise cancellation</span><em data-out="ncB2">10 / 10</em></div>
+    <div class="ticks" data-ticks="ncB"></div>
+   </div>
+   <div class="blk">
+    <div class="t"><span>Immersive audio</span></div>
+    <div class="seg seg-group"><button class="on">Off</button><button>Still</button><button>Motion</button></div>
+   </div>
+   <div class="blk">
+    <div class="t"><span>Equalizer</span><em>Flat</em></div>
+    <div class="eqrow"><span>Bass</span><input type="range" min="-10" max="10" value="0" data-range="bb1" data-fmt="eq"><em data-out="bb1">0</em></div>
+    <div class="eqrow"><span>Mid</span><input type="range" min="-10" max="10" value="0" data-range="bb2" data-fmt="eq"><em data-out="bb2">0</em></div>
+    <div class="eqrow"><span>Treble</span><input type="range" min="-10" max="10" value="0" data-range="bb3" data-fmt="eq"><em data-out="bb3">0</em></div>
+   </div>
+   <div class="blk list" style="padding-bottom:40px">
+    <div class="it"><span>Multipoint</span><div class="tog on"></div></div>
+    <div class="it"><span>Pause when removed</span><div class="tog on"></div></div>
+    <div class="it"><span>Wind block</span><div class="tog"></div></div>
+    <div class="it"><span>Devices</span><em>Pixel, MacBook ›</em></div>
+    <div class="it"><span>Shortcut button</span><em>Modes ›</em></div>
+   </div>
+  </div>
+
+  <div class="when-connecting center">
+   <img class="breath" src="assets/hp-sand.webp" alt="">
+   <h3>Connecting</h3>
+   <p>Talking to your QC Ultra 2.</p>
+  </div>
+  <div class="when-off center">
+   <img src="assets/hp-sand.webp" alt="" style="opacity:.35">
+   <h3>Not connected</h3>
+   <p>Put them on. This screen updates by itself.</p>
+   <button class="btn">Try again</button>
+  </div>
+ </div>
+</div>
+<figcaption>B · Midnight<small>OpenAI-style dark and typographic. The mode is the headline, pill buttons, hairline sections.</small></figcaption>
+</figure>
+
+<!-- ================= C ================= -->
+<figure>
+<div class="phone C st-connected">
+ <div class="screen">
+  <div class="sbar"><span>15:42</span><span>5G ▮▮▮</span></div>
+
+  <div class="when-connected" style="display:block">
+   <div class="head"><img src="assets/hp-sand.webp" alt=""><div><h2>QC Ultra 2</h2><small>Connected · Multipoint on</small></div></div>
+   <div class="warn low-only">⚡ 10% left. Charge soon.</div>
+   <div class="g">
+    <div class="t wide batt"><div class="ring" style="--b:72" data-ring><b data-batt>72%</b></div><div><div style="font-size:16px;font-weight:600">Battery</div><div style="color:rgba(255,255,255,.55);font-size:13px" data-hours>About 17 h left</div></div></div>
+    <div class="t wide"><div class="h">Mode</div>
+     <div class="modes seg-group">
+      <button class="mode on"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M12 7a5 5 0 1 0 5 5"/></svg>Quiet</button>
+      <button class="mode"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>Aware</button>
+      <button class="mode"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/></svg>Immerse</button>
+      <button class="mode"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8"/></svg>Cinema</button>
+      <button class="mode"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>Focus</button>
+     </div>
+    </div>
+    <div class="t" style="padding:0;background:none;border:0"><div class="vslider" data-vs="10"><div class="fill" style="height:100%"></div><div class="ic">Noise · <span data-vsv>10</span></div></div></div>
+    <div class="t tile-sq"><div class="h">Immersive audio</div>
+     <div class="seg3 seg-group"><button class="on">Off</button><button>Still</button><button>Motion</button></div>
+    </div>
+    <div class="t wide"><div class="h">Equalizer</div>
+     <div class="eqb">
+      <div class="col"><div class="vs" data-vs="5" data-eq><div class="fill" style="height:50%"></div><div class="mid"></div></div>Bass</div>
+      <div class="col"><div class="vs" data-vs="5" data-eq><div class="fill" style="height:50%"></div><div class="mid"></div></div>Mid</div>
+      <div class="col"><div class="vs" data-vs="5" data-eq><div class="fill" style="height:50%"></div><div class="mid"></div></div>Treble</div>
+     </div>
+    </div>
+    <div class="t chip on" data-chip><div class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="4" width="9" height="14" rx="2"/><rect x="13" y="7" width="9" height="11" rx="2"/></svg></div><div><b>Multipoint</b><small>2 devices</small></div></div>
+    <div class="t chip on" data-chip><div class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M6 4v16l14-8z"/></svg></div><div><b>Auto pause</b><small>When removed</small></div></div>
+    <div class="t chip" data-chip style="margin-bottom:40px"><div class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M3 8h12a3 3 0 1 0-3-3M3 12h17a3 3 0 1 1-3 3M3 16h8"/></svg></div><div><b>Wind block</b><small>Off</small></div></div>
+    <div class="t chip" style="margin-bottom:40px"><div class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></div><div><b>Settings</b><small>Button, voice</small></div></div>
+   </div>
+  </div>
+
+  <div class="when-connecting center"><img class="shimmer" src="assets/hp-sand.webp" alt=""><h3>Connecting…</h3><p>Hang on a second.</p></div>
+  <div class="when-off center"><img src="assets/hp-sand.webp" alt="" style="opacity:.3"><h3>Not connected</h3><p>Turn your headphones on.</p><button class="btn">Connect</button></div>
+ </div>
+</div>
+<figcaption>C · Tiles<small>Control Center grid, dark glass. Big tap targets, vertical noise slider, everything on one screen.</small></figcaption>
+</figure>
+
+<!-- ================= D ================= -->
+<figure>
+<div class="phone D st-connected">
+ <div class="screen">
+  <div class="sbar"><span>15:42</span><span>5G ▮▮▮</span></div>
+
+  <div class="when-connected" style="display:block">
+   <div class="head"><small>CONNECTED</small><h2>QC Ultra 2</h2></div>
+   <div class="dial">
+    <svg viewBox="0 0 300 300"><circle cx="150" cy="150" r="138" fill="none" stroke="#e3ddd1" stroke-width="6"/><circle data-arc cx="150" cy="150" r="138" fill="none" stroke="#1d1b17" stroke-width="6" stroke-linecap="round" stroke-dasharray="867" stroke-dashoffset="243" transform="rotate(-90 150 150)"/></svg>
+    <img src="assets/hp-sand.webp" alt="">
+    <div class="pct"><span data-batt>72%</span> battery</div>
+   </div>
+   <div class="mname"><h3 data-bind="modeD">Quiet</h3><p data-bind="modeDsub">Full noise cancellation</p></div>
+   <div class="wheel seg-group" data-bindto="modeD">
+    <button class="on" data-v="Quiet" data-s="Full noise cancellation"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M12 7a5 5 0 1 0 5 5"/></svg></button>
+    <button data-v="Aware" data-s="Hear the world around you"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+    <button data-v="Immersion" data-s="Quiet with spatial audio"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/></svg></button>
+    <button data-v="Cinema" data-s="Wide sound for movies"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8"/></svg></button>
+    <button data-v="Focus" data-s="Your custom mode"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg></button>
+   </div>
+   <div class="sheet">
+    <div class="grab"></div>
+    <div class="srow" style="display:block"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span>Noise cancellation</span><em data-out="ncD">10</em></div><input type="range" min="0" max="10" value="10" data-range="ncD"></div>
+    <div class="srow" style="display:block"><div style="margin-bottom:10px">Immersive audio</div><div class="seg seg-group"><button class="on">Off</button><button>Still</button><button>Motion</button></div></div>
+    <div class="srow"><span>Equalizer</span><em>Flat ›</em></div>
+    <div class="srow"><span>Multipoint</span><div class="tog on"></div></div>
+    <div class="srow"><span>Pause when removed</span><div class="tog on"></div></div>
+    <div class="srow"><span>Wind block</span><div class="tog"></div></div>
+    <div class="srow" style="border:0"><span>More settings</span><em>›</em></div>
+   </div>
+  </div>
+
+  <div class="when-connecting center"><img src="assets/hp-sand.webp" alt="" style="height:210px;animation:floaty 2.6s ease-in-out infinite"><h3>Connecting…</h3><p>Just a moment.</p></div>
+  <div class="when-off center"><img src="assets/hp-sand.webp" alt="" style="height:210px;opacity:.4;filter:grayscale(1)"><h3>Not connected</h3><p>Turn your headphones on.</p><button class="btn">Connect</button></div>
+ </div>
+</div>
+<figcaption>D · Dial<small>Warm and calm. Battery ring around the product, one big mode, the rest lives in a bottom sheet.</small></figcaption>
+</figure>
+
+</div>
+
+<script>
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+// segmented groups (modes, spatial)
+$$('.seg-group').forEach(g => g.addEventListener('click', e => {
+  const b = e.target.closest('button, .mode'); if (!b || !g.contains(b)) return;
+  [...g.children].forEach(c => c.classList.toggle('on', c === b));
+  const bind = g.dataset.bindto;
+  if (bind && b.dataset.v) {
+    const phone = g.closest('.phone');
+    $$(`[data-bind="${bind}"]`, phone).forEach(n => n.textContent = b.dataset.v);
+    if (b.dataset.s) $$(`[data-bind="${bind}sub"]`, phone).forEach(n => n.textContent = b.dataset.s);
+  }
+}));
+
+// toggles + chips
+$$('.tog').forEach(t => t.addEventListener('click', () => t.classList.toggle('on')));
+$$('[data-chip]').forEach(c => c.addEventListener('click', () => {
+  c.classList.toggle('on');
+  const s = c.querySelector('small'); if (s && /^(On|Off)$/.test(s.textContent)) s.textContent = c.classList.contains('on') ? 'On' : 'Off';
+}));
+
+// ranges
+function paint(r) {
+  const p = (r.value - r.min) / (r.max - r.min) * 100;
+  r.style.setProperty('--p', p + '%');
+  const out = document.querySelectorAll(`[data-out="${r.dataset.range}"]`);
+  const v = +r.value;
+  out.forEach(o => o.textContent = r.dataset.fmt === 'nc' ? (v === 10 ? 'Max' : v === 0 ? 'Off' : v) : r.dataset.fmt === 'eq' && v > 0 ? '+' + v : v);
+}
+$$('input[type=range]').forEach(r => { r.addEventListener('input', () => paint(r)); paint(r); });
+
+// tick bar (B)
+$$('[data-ticks]').forEach(bar => {
+  const phone = bar.closest('.phone');
+  for (let i = 1; i <= 10; i++) { const t = document.createElement('i'); t.style.height = (30 + i * 7) + '%'; bar.appendChild(t); }
+  const set = n => {
+    [...bar.children].forEach((t, i) => t.classList.toggle('on', i < n));
+    $$('[data-out="ncB"]', phone).forEach(o => o.textContent = n);
+    $$('[data-out="ncB2"]', phone).forEach(o => o.textContent = n + ' / 10');
+  };
+  const pick = e => { const r = bar.getBoundingClientRect(); set(Math.max(0, Math.min(10, Math.ceil((e.clientX - r.left) / r.width * 10)))); };
+  bar.addEventListener('pointerdown', e => { pick(e); bar.setPointerCapture(e.pointerId); });
+  bar.addEventListener('pointermove', e => { if (e.buttons) pick(e); });
+  set(10);
+});
+
+// vertical fill sliders (C)
+$$('[data-vs]').forEach(vs => {
+  const fill = vs.querySelector('.fill'), val = vs.querySelector('[data-vsv]');
+  const pick = e => {
+    const r = vs.getBoundingClientRect();
+    const f = Math.max(0, Math.min(1, (r.bottom - e.clientY) / r.height));
+    fill.style.height = (f * 100) + '%';
+    if (val) val.textContent = Math.round(f * 10);
+  };
+  vs.addEventListener('pointerdown', e => { pick(e); vs.setPointerCapture(e.pointerId); });
+  vs.addEventListener('pointermove', e => { if (e.buttons) pick(e); });
+});
+
+// state switcher
+function battery(pct) {
+  $$('[data-batt]').forEach(n => n.textContent = pct + '%');
+  $$('[data-battfill]').forEach(n => { n.style.width = pct + '%'; n.style.background = pct <= 20 ? '#ff9f0a' : '#34c759'; });
+  $$('[data-ring]').forEach(n => n.style.setProperty('--b', pct));
+  $$('[data-hours]').forEach(n => n.textContent = pct <= 20 ? 'About 2 h left' : 'About 17 h left');
+  $$('[data-arc]').forEach(n => { n.setAttribute('stroke-dashoffset', 867 * (1 - pct / 100)); n.setAttribute('stroke', pct <= 20 ? '#e8890c' : '#1d1b17'); });
+}
+$('#states');
+function $(s) { return document.querySelector(s); }
+$('#states').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  $$('#states button').forEach(x => x.classList.toggle('on', x === b));
+  $$('.phone').forEach(p => { p.classList.remove('st-connected', 'st-low', 'st-connecting', 'st-off'); b.dataset.st.split(' ').forEach(c => p.classList.add(c)); });
+  battery(b.dataset.st.includes('st-low') ? 10 : 72);
+});
+battery(72);
+</script>
+</body>
+</html>

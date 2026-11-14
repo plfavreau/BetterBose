@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QC Ultra · logo variants</title>
+<style>
+  :root { --bg:#f2f2f7; --ink:#111; --sub:#6e6e73; }
+  * { box-sizing:border-box; margin:0; }
+  body { font:15px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Text","Inter",system-ui,sans-serif; background:var(--bg); color:var(--ink); padding:28px 18px 60px; }
+  h1 { font-size:28px; letter-spacing:-.02em; }
+  .lead { color:var(--sub); margin:6px 0 22px; max-width:640px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; }
+  .card { background:#fff; border-radius:22px; padding:18px; }
+  .card h2 { font-size:17px; display:flex; align-items:baseline; gap:8px; }
+  .card h2 span { font-size:13px; color:var(--sub); font-weight:500; }
+  .card p { color:var(--sub); font-size:13px; margin:4px 0 14px; }
+  .shapes { display:flex; gap:14px; align-items:flex-end; }
+  .shape { display:flex; flex-direction:column; align-items:center; gap:6px; font-size:11px; color:var(--sub); }
+  .ic { width:72px; height:72px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.12); }
+  .ic svg { width:100%; height:100%; display:block; }
+  .circle { border-radius:50%; }
+  .squircle { border-radius:22px; }
+  .big { width:108px; height:108px; border-radius:26px; }
+  .home { margin-top:14px; border-radius:16px; padding:16px 10px 12px; display:grid; grid-template-columns:repeat(4,1fr); gap:10px 0;
+          background:linear-gradient(160deg,#5b6b7d,#2c3440 55%,#1b1f26); }
+  .home .app { display:flex; flex-direction:column; align-items:center; gap:5px; color:#fff; font-size:11px; }
+  .home .app .ic { width:48px; height:48px; }
+  .dummy { width:48px; height:48px; border-radius:50%; background:rgba(255,255,255,.18); }
+  .themed { background:linear-gradient(160deg,#e9eef3,#cfd8e2); }
+  .themed .app { color:#1b1f26; }
+  .themed .dummy { background:#c9d6e4; }
+</style>
+</head>
+<body>
+<h1>New app icon</h1>
+<p class="lead">Six directions. Each shows the Pixel circle mask, a rounded square, the themed (Material You monochrome) version, and how it sits on a home screen next to other icons.</p>
+<div class="grid" id="grid"></div>
+
+<template id="logos">
+  <!-- 1 Arc -->
+  <svg data-name="Arc" data-sub="minimal headphones" data-desc="A single confident headband with two earcups. Black, white, nothing else. The most literal and the most Apple." viewBox="0 0 100 100">
+    <rect width="100" height="100" fill="#111"/>
+    <path d="M31 60 V50 a19 19 0 0 1 38 0 V60" fill="none" stroke="#fff" stroke-width="5.5" stroke-linecap="round"/>
+    <rect x="25" y="55" width="12" height="20" rx="6" fill="#fff"/>
+    <rect x="63" y="55" width="12" height="20" rx="6" fill="#fff"/>
+  </svg>
+  <!-- 2 Hush -->
+  <svg data-name="Hush" data-sub="( • )" data-desc="Two earcups around you, the dot is you in your bubble of quiet. Abstract, typographic, very OpenAI." viewBox="0 0 100 100">
+    <rect width="100" height="100" fill="#fff"/>
+    <path d="M39 29 a27 27 0 0 0 0 42" fill="none" stroke="#111" stroke-width="6" stroke-linecap="round"/>
+    <path d="M61 29 a27 27 0 0 1 0 42" fill="none" stroke="#111" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="50" cy="50" r="6.5" fill="#111"/>
+  </svg>
+  <!-- 3 Field -->
+  <svg data-name="Field" data-sub="noise cancelling" data-desc="Concentric rings fading out from a bright core: the outside world getting quieter. Calm, ambient." viewBox="0 0 100 100">
+    <defs><radialGradient id="fg" cx="50%" cy="40%" r="75%"><stop offset="0" stop-color="#3a3a3e"/><stop offset="1" stop-color="#0c0c0e"/></radialGradient></defs>
+    <rect width="100" height="100" fill="url(#fg)"/>
+    <circle cx="50" cy="50" r="31" fill="none" stroke="#fff" stroke-opacity=".12" stroke-width="3"/>
+    <circle cx="50" cy="50" r="23" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="3"/>
+    <circle cx="50" cy="50" r="15" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="3"/>
+    <circle cx="50" cy="50" r="7.5" fill="#fff"/>
+  </svg>
+  <!-- 4 Sand -->
+  <svg data-name="Sand" data-sub="warm premium" data-desc="The Arc glyph on the Sandstone colour of the headphones. Softer and more lifestyle, like a Bose box." viewBox="0 0 100 100">
+    <defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#efe9df"/><stop offset="1" stop-color="#ddd3c4"/></linearGradient></defs>
+    <rect width="100" height="100" fill="url(#sg)"/>
+    <path d="M31 60 V50 a19 19 0 0 1 38 0 V60" fill="none" stroke="#2a2622" stroke-width="4" stroke-linecap="round"/>
+    <rect x="24" y="54" width="14" height="22" rx="7" fill="#2a2622"/>
+    <rect x="62" y="54" width="14" height="22" rx="7" fill="#2a2622"/>
+  </svg>
+  <!-- 5 Q -->
+  <svg data-name="Q" data-sub="monogram" data-desc="A thick Q where the tail is a small earcup. Reads as a letter first, headphones second." viewBox="0 0 100 100">
+    <rect width="100" height="100" fill="#fff"/>
+    <circle cx="48" cy="48" r="20" fill="none" stroke="#111" stroke-width="8"/>
+    <rect x="60" y="60" width="11" height="17" rx="5.5" transform="rotate(-45 65.5 68.5)" fill="#111"/>
+  </svg>
+  <!-- 6 Glow -->
+  <svg data-name="Glow" data-sub="gradient band" data-desc="The Arc with a lit headband that fades to the cups, on deep graphite. A bit more personality and depth." viewBox="0 0 100 100">
+    <defs>
+      <linearGradient id="gb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2c2c30"/><stop offset="1" stop-color="#0e0e10"/></linearGradient>
+      <linearGradient id="gs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity=".35"/></linearGradient>
+      <linearGradient id="gc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9fd3ff"/><stop offset="1" stop-color="#c9b8ff"/></linearGradient>
+    </defs>
+    <rect width="100" height="100" fill="url(#gb)"/>
+    <path d="M31 60 V50 a19 19 0 0 1 38 0 V60" fill="none" stroke="url(#gs)" stroke-width="5" stroke-linecap="round"/>
+    <rect x="25" y="55" width="12" height="20" rx="6" fill="url(#gc)"/>
+    <rect x="63" y="55" width="12" height="20" rx="6" fill="url(#gc)"/>
+  </svg>
+</template>
+
+<script>
+const tpl = document.getElementById('logos').content.querySelectorAll('svg');
+const grid = document.getElementById('grid');
+const mono = svg => { // themed icon: glyph only, tinted
+  const c = svg.cloneNode(true);
+  c.querySelectorAll('defs').forEach(d => d.remove());
+  const bg = c.querySelector('rect'); bg.setAttribute('fill', '#c9d6e4');
+  c.querySelectorAll('*').forEach((el, i) => {
+    if (el === bg) return;
+    ['fill','stroke'].forEach(a => { const v = el.getAttribute(a); if (v && v !== 'none') el.setAttribute(a, '#2b4a66'); });
+  });
+  return c;
+};
+tpl.forEach((svg, i) => {
+  const card = document.createElement('div'); card.className = 'card';
+  card.innerHTML = `<h2>${i+1}. ${svg.dataset.name} <span>${svg.dataset.sub}</span></h2><p>${svg.dataset.desc}</p>`;
+  const shapes = document.createElement('div'); shapes.className = 'shapes';
+  const add = (cls, label, node) => {
+    const s = document.createElement('div'); s.className = 'shape';
+    const ic = document.createElement('div'); ic.className = 'ic ' + cls; ic.appendChild(node);
+    s.appendChild(ic); s.insertAdjacentHTML('beforeend', label); shapes.appendChild(s);
+  };
+  add('circle big', 'Pixel', svg.cloneNode(true));
+  add('squircle', 'Rounded', svg.cloneNode(true));
+  add('circle', 'Themed', mono(svg));
+  card.appendChild(shapes);
+  for (const themed of [false, true]) {
+    const home = document.createElement('div'); home.className = 'home' + (themed ? ' themed' : '');
+    for (let k = 0; k < 4; k++) {
+      const a = document.createElement('div'); a.className = 'app';
+      if (k === 1) { const ic = document.createElement('div'); ic.className = 'ic circle'; ic.appendChild(themed ? mono(svg) : svg.cloneNode(true)); a.appendChild(ic); a.insertAdjacentHTML('beforeend','QC Ultra'); }
+      else a.innerHTML = `<div class="dummy"></div>${['Maps','','Music','Camera'][k]}`;
+      home.appendChild(a);
+    }
+    card.appendChild(home);
+  }
+  grid.appendChild(card);
+});
+</script>
+</body>
+</html>

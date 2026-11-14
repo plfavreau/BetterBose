@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QC Ultra · widget variants</title>
+<style>
+  * { box-sizing:border-box; margin:0; }
+  body { font:15px/1.35 -apple-system,BlinkMacSystemFont,"SF Pro Text","Inter",system-ui,sans-serif; background:#f2f2f7; color:#111; padding:28px 14px 60px; }
+  h1 { font-size:28px; letter-spacing:-.02em; padding:0 4px; }
+  .lead { color:#6e6e73; margin:6px 4px 20px; max-width:640px; }
+  .tabs { display:flex; gap:8px; margin:0 4px 16px; flex-wrap:wrap; }
+  .tabs button { border:0; background:#e4e4ea; padding:8px 14px; border-radius:99px; font:inherit; font-size:13px; font-weight:600; cursor:pointer; }
+  .tabs button.on { background:#111; color:#fff; }
+  .screens { display:flex; gap:18px; overflow-x:auto; padding:4px 4px 16px; scroll-snap-type:x mandatory; }
+  .screen { flex:0 0 360px; scroll-snap-align:start; border-radius:34px; padding:54px 16px 24px; min-height:700px; position:relative; color:#fff;
+            background:linear-gradient(170deg,#7d8fa3 0%,#3d4a5a 45%,#1d232c 100%); }
+  .screen.light { background:linear-gradient(170deg,#f6efe6 0%,#e3d6c5 50%,#c9b8a2 100%); }
+  .screen h3 { position:absolute; top:18px; left:22px; font-size:13px; font-weight:600; opacity:.85; }
+  .row { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:18px; }
+  .lbl { font-size:11px; text-align:center; margin-top:-10px; margin-bottom:14px; opacity:.75; }
+  .s2 { grid-column:span 2; aspect-ratio:1; }
+  .s4x1 { grid-column:span 4; height:72px; }
+  .s4x2 { grid-column:span 4; height:164px; }
+  .s2x1 { grid-column:span 2; height:72px; }
+  .w { border-radius:24px; background:#fff; color:#111; position:relative; overflow:hidden; }
+  .w.dark { background:rgba(22,22,24,.78); color:#fff; backdrop-filter:blur(20px); }
+  .w.you { background:#dbe4ef; color:#1c2a3a; }
+  .w.you.light { background:#f3e3d0; color:#3b2a18; }
+  .sub { font-size:12px; color:#6e6e73; }
+  .dark .sub { color:#a1a1a6; }
+  .you .sub { color:inherit; opacity:.7; }
+  img.hp { position:absolute; object-fit:contain; filter:drop-shadow(0 6px 10px rgba(0,0,0,.18)); }
+  .pct { font-weight:700; letter-spacing:-.02em; }
+  .low { color:#ff9500 !important; }
+  /* mode buttons */
+  .modes { display:flex; gap:6px; }
+  .mb { flex:1; height:40px; border-radius:14px; background:#f2f2f5; display:flex; align-items:center; justify-content:center; gap:5px; font-size:12px; font-weight:600; cursor:pointer; transition:background .2s,color .2s; user-select:none; }
+  .mb svg { width:18px; height:18px; }
+  .mb.on { background:#111; color:#fff; }
+  .dark .mb { background:rgba(255,255,255,.1); }
+  .dark .mb.on { background:#fff; color:#111; }
+  .you .mb { background:rgba(255,255,255,.55); }
+  .you .mb.on { background:#1c2a3a; color:#fff; }
+  .you.light .mb.on { background:#3b2a18; }
+  .stack .mb { flex-direction:column; height:50px; gap:2px; font-size:11px; }
+  .circ { width:40px; flex:0 0 40px; border-radius:50%; }
+  .bar { height:6px; border-radius:3px; background:#e9e9ee; overflow:hidden; }
+  .bar i { display:block; height:100%; background:#34c759; border-radius:3px; }
+  .dark .bar { background:rgba(255,255,255,.15); }
+  .ring { position:absolute; inset:6px; }
+  .s2x1 .ring { inset:0; }
+  .tag { display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:600; padding:5px 10px; border-radius:99px; background:#f2f2f5; }
+  .dark .tag { background:rgba(255,255,255,.12); }
+  .you .tag { background:rgba(255,255,255,.55); }
+  .dot { width:7px; height:7px; border-radius:50%; background:#34c759; }
+  .bolt { width:12px; height:12px; }
+  .w.off > * { opacity:.5; }
+  .note { color:#6e6e73; font-size:13px; margin:2px 4px 24px; max-width:640px; }
+</style>
+</head>
+<body>
+<h1>Home screen widgets</h1>
+<p class="lead">Five widgets in the same "Pure" style as the app. Mode buttons are tappable here, like on the phone (switches mode without opening the app). Swipe between wallpapers and states.</p>
+<div class="tabs" id="tabs"></div>
+<div class="screens" id="screens"></div>
+<p class="note">Sizes are Pixel launcher cells: 2×2, 4×1, 4×2, 2×1. Every widget is resizable within its family. When the headphones are off, widgets dim and show the last known battery with "Not connected"; tapping opens the app.</p>
+
+<script>
+const ICON = {
+  Quiet: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 4a8 8 0 1 0 0 16a8 8 0 1 0 0-16"/><path d="M8.5 12h7"/></svg>',
+  Aware: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="2.6"/></svg>',
+  Immersion: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="2.5"/><path d="M7.5 7.5a6.4 6.4 0 0 0 0 9M16.5 7.5a6.4 6.4 0 0 1 0 9M4.6 4.6a10.5 10.5 0 0 0 0 14.8M19.4 4.6a10.5 10.5 0 0 1 0 14.8"/></svg>',
+  Focus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.2"/></svg>',
+};
+const BOLT = '<svg class="bolt" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>';
+const MODES = ['Quiet','Aware','Immersion','Focus'];
+
+const SETS = [
+  { id:'pure',  label:'Pure (white)',     cls:'',     wall:'' },
+  { id:'dark',  label:'Dark glass',       cls:'dark', wall:'' },
+  { id:'you',   label:'Material You tint',cls:'you',  wall:'' },
+  { id:'sand',  label:'Light wallpaper',  cls:'',     wall:'light' },
+  { id:'low',   label:'Low battery',      cls:'',     wall:'', battery:14 },
+  { id:'off',   label:'Not connected',    cls:'',     wall:'', off:true },
+];
+
+function ring(p, low, cls) {
+  const r = 46, c = 2 * Math.PI * r;
+  const track = cls === 'dark' ? 'rgba(255,255,255,.14)' : cls === 'you' ? 'rgba(255,255,255,.6)' : '#eeeef2';
+  const col = low ? '#ff9500' : '#34c759';
+  return `<svg class="ring" viewBox="0 0 120 120"><circle cx="60" cy="60" r="${r}" fill="none" stroke="${track}" stroke-width="7"/>
+  <circle cx="60" cy="60" r="${r}" fill="none" stroke="${col}" stroke-width="7" stroke-linecap="round" stroke-dasharray="${c*p/100} ${c}" transform="rotate(-90 60 60)"/></svg>`;
+}
+const modeBtns = (cur, withLabel, circle) => `<div class="modes">${(circle ? MODES.slice(0,3) : MODES).map(m =>
+  `<div class="mb${m===cur?' on':''}${circle?' circ':''}" data-m="${m}">${ICON[m]}${withLabel?`<span>${m}</span>`:''}</div>`).join('')}</div>`;
+
+function screen(set) {
+  const b = set.battery ?? 62, low = b <= 20, off = !!set.off, k = set.cls + (set.wall && set.cls==='you' ? ' light' : '');
+  const op = '';
+  const status = off ? 'Not connected' : 'Quiet';
+  const pctCls = low ? 'pct low' : 'pct';
+  const kk = k + (off ? ' off' : '');
+  return `<div class="screen ${set.wall}"><h3>${set.label}</h3>
+  <div class="row">
+    <div class="w s2 ${kk}">
+      ${ring(b, low, set.cls)}
+      <img class="hp" src="assets/hp-black.webp" style="left:33%;top:21%;width:34%;height:30%">
+      <div style="position:absolute;left:0;right:0;bottom:31%;text-align:center"><div class="${pctCls}" style="font-size:20px">${b}%</div></div>
+      <div class="sub" style="position:absolute;left:0;right:0;bottom:22%;text-align:center;font-weight:600;font-size:11px">${status}</div>
+    </div>
+    <div class="w s2 ${kk}" style="padding:16px;display:flex;flex-direction:column;justify-content:space-between">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div><div class="sub" style="font-weight:600">QC Ultra</div><div class="${pctCls}" style="font-size:40px;line-height:1.05;margin-top:2px">${b}<span style="font-size:22px">%</span></div></div>
+      </div>
+      <div class="bar"><i style="width:${b}%;${low?'background:#ff9500':''}"></i></div>
+      <div class="tag">${off?'<span class="dot" style="background:#aeaeb2"></span>Not connected':ICON.Quiet.replace('<svg','<svg style="width:14px;height:14px"')+' Quiet'}</div>
+    </div>
+  </div>
+  <div class="lbl">A · Battery ring 2×2 &nbsp;&nbsp;&nbsp; B · Big number 2×2</div>
+
+  <div class="row"><div class="w s4x1 ${kk}" style="padding:0 12px 0 16px;display:flex;align-items:center;gap:12px">
+    <div style="width:54px"><div class="${pctCls}" style="font-size:20px">${b}%</div><div class="sub" style="font-size:11px">${off?'Offline':'QC Ultra'}</div></div>
+    <div style="flex:1">${modeBtns(off?null:'Quiet', false, false)}</div>
+  </div></div>
+  <div class="lbl">C · Mode bar 4×1</div>
+
+  <div class="row"><div class="w s4x2 ${kk}" style="padding:14px 14px 14px 16px">
+    <img class="hp" src="assets/hp-black.webp" style="left:14px;top:10px;width:92px;height:76px">
+    <div style="position:absolute;left:118px;top:14px;right:14px">
+      <div style="font-weight:700;font-size:17px">QC Ultra</div>
+      <div class="sub" style="display:flex;align-items:center;gap:6px;margin-top:2px"><span class="dot" style="${off?'background:#aeaeb2':''}"></span>${off?'Not connected':'Connected · Pixel'}</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:10px"><div class="bar" style="flex:1"><i style="width:${b}%;${low?'background:#ff9500':''}"></i></div><div class="${pctCls}" style="font-size:14px">${b}%</div></div>
+    </div>
+    <div class="stack" style="position:absolute;left:12px;right:12px;bottom:12px">${modeBtns(off?null:'Quiet', true, false)}</div>
+  </div></div>
+  <div class="lbl">D · Dashboard 4×2</div>
+
+  <div class="row">
+    <div class="w s2x1 ${kk}" style="padding:0 14px;display:flex;align-items:center;gap:10px">
+      <div style="position:relative;width:44px;height:44px">${ring(b, low, set.cls)}<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">${off?'':ICON.Quiet.replace('<svg','<svg style="width:18px;height:18px"')}</div></div>
+      <div><div class="${pctCls}" style="font-size:18px">${b}%</div><div class="sub" style="font-size:12px">${status}</div></div>
+    </div>
+    <div class="w s2x1 ${kk}" style="padding:0 10px;display:flex;align-items:center">${modeBtns(off?null:'Quiet', false, true).replace('class="modes"','class="modes" style="width:100%;justify-content:space-between"')}</div>
+  </div>
+  <div class="lbl">E · Mini 2×1 (battery, or quick modes)</div>
+  </div>`;
+}
+
+const tabs = document.getElementById('tabs'), screens = document.getElementById('screens');
+screens.innerHTML = SETS.map(screen).join('');
+SETS.forEach((s, i) => {
+  const b = document.createElement('button'); b.textContent = s.label; if (!i) b.className = 'on';
+  b.onclick = () => { [...tabs.children].forEach(x => x.className = ''); b.className = 'on'; screens.children[i].scrollIntoView({behavior:'smooth', inline:'start', block:'nearest'}); };
+  tabs.appendChild(b);
+});
+screens.addEventListener('click', e => {
+  const mb = e.target.closest('.mb'); if (!mb) return;
+  const w = mb.closest('.w'); if (w.classList.contains('off')) return;
+  w.querySelectorAll('.mb').forEach(x => x.classList.toggle('on', x === mb));
+  w.querySelectorAll('.tag').forEach(t => t.innerHTML = ICON[mb.dataset.m].replace('<svg','<svg style="width:14px;height:14px"') + ' ' + mb.dataset.m);
+});
+</script>
+</body>
+</html>
