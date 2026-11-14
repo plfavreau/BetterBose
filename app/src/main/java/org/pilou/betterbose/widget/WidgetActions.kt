@@ -17,43 +17,22 @@ import kotlinx.coroutines.launch
 import org.pilou.betterbose.alerts.BatteryAlerts
 import org.pilou.betterbose.data.AppPrefs
 import org.pilou.betterbose.data.BoseDevices
-import org.pilou.betterbose.data.HeadsetRepository
-import org.pilou.betterbose.data.HeadsetSession
+import org.pilou.betterbose.data.Headsets
 
 private const val TAG = "BetterBose"
 private const val BT_SETTLE_MS = 3000L
 
-/** Mode button on a widget: reuses the app's link when it has one, otherwise opens a short one. */
+/** Mode button on a widget: goes through the shared link, so it never fights the app for the channel. */
 class SetModeAction : ActionCallback {
     override suspend fun onAction(context: Context, glanceId: GlanceId, parameters: ActionParameters) {
         val index = parameters[MODE_KEY] ?: return
         val before = WidgetStore.state.value
         if (!before.connected) return
         WidgetStore.patch(context) { it.copy(currentMode = index) }
-
-        HeadsetRepository.active?.takeIf { it.isLinked }?.let {
-            it.setMode(index)
-            return
-        }
-        val ok = runCatching { switchOverShortLink(context, index) }
+        val sent = runCatching { Headsets.setModeFromWidget(context, index) }
             .onFailure { Log.w(TAG, "widget mode switch failed", it) }
             .getOrDefault(false)
-        if (!ok) WidgetStore.patch(context) { it.copy(currentMode = before.currentMode) }
-    }
-
-    private suspend fun switchOverShortLink(context: Context, index: Int): Boolean {
-        val device = BoseDevices(context).connected() ?: return false
-        val session = HeadsetSession(device, Dispatchers.IO) { }
-        try {
-            session.open()
-            if (!session.setMode(index)) return false
-        } finally {
-            session.close()
-        }
-        val prefs = AppPrefs.get(context)
-        prefs.loadHeadset()?.takeIf { it.address == device.address }?.let { prefs.saveHeadset(it.copy(currentMode = index)) }
-        Log.i(TAG, "widget switched mode to $index")
-        return true
+        if (!sent) WidgetStore.patch(context) { it.copy(currentMode = before.currentMode) }
     }
 
     companion object {

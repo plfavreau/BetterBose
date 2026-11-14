@@ -11,6 +11,7 @@ import org.pilou.betterbose.bmap.bytesOf
 
 private const val MAX_MODE_SLOT = 10
 private const val MODE_SWITCH_TIMEOUT_MS = 4000L
+private val EDITABLE = listOf(Addr.NAME, Addr.EQ, Addr.MULTIPOINT, Addr.AUTO_PAUSE)
 
 /**
  * One open BMAP connection. Every call runs on [io], a single-lane dispatcher, because
@@ -44,21 +45,22 @@ class HeadsetSession(
     private suspend fun setGet(addr: Pair<Int, Int>, payload: ByteArray): BmapFrame? =
         withContext(io) { client.request(addr.first, addr.second, Op.SET_GET, payload).lastOrNull() }
 
-    /** Reads everything the home screen needs. Missing features stay null. */
-    suspend fun readAll(): Headset {
+    /** Reads everything the home screen shows, most visible first. Mode names come from [readModes]. */
+    suspend fun readCore(modes: List<Mode>): Headset {
         setGet(Addr.NOTIFY, NOTIFY_SUBSCRIBE)
-        var h = Headset(name = device.name ?: "QC Ultra", address = device.address)
-        h = get(Addr.FIRMWARE)?.takeUnless { it.isError }?.let { h.copy(firmware = it.ascii().substringBefore("+")) } ?: h
-        for (addr in listOf(
-            Addr.NAME, Addr.BATTERY, Addr.CURRENT_MODE, Addr.LIVE, Addr.EQ,
-            Addr.MULTIPOINT, Addr.AUTO_PAUSE, Addr.SHORTCUT, Addr.SOURCES,
-        )) {
+        var h = Headset(name = device.name ?: "QC Ultra", address = device.address, modes = modes)
+        for (addr in listOf(Addr.CURRENT_MODE, Addr.LIVE, Addr.BATTERY) + EDITABLE + listOf(Addr.SHORTCUT, Addr.SOURCES)) {
             get(addr)?.let { h = h.apply(it) }
         }
-        return h.copy(modes = readModes())
+        h = get(Addr.FIRMWARE)?.takeUnless { it.isError }?.let { h.copy(firmware = it.ascii().substringBefore("+")) } ?: h
+        return h
     }
 
-    private suspend fun readModes(): List<Mode> {
+    /** Re-reads what the user can change, to settle values edited while a sync was running. */
+    suspend fun readEditable(): List<BmapFrame> =
+        (listOf(Addr.CURRENT_MODE, Addr.LIVE) + EDITABLE).mapNotNull { get(it) }
+
+    suspend fun readModes(): List<Mode> {
         val modes = mutableListOf<Mode>()
         for (idx in 0..MAX_MODE_SLOT) {
             val r = get(Addr.MODE_RECORD, bytesOf(idx)) ?: break

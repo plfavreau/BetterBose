@@ -3,6 +3,7 @@ package org.pilou.betterbose.data
 import android.bluetooth.BluetoothDevice
 import android.util.Log
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -39,6 +40,7 @@ class HeadsetRepository(
     private var session: HeadsetSession? = null
     private var sessionJob: Job? = null
     private var eventsJob: Job? = null
+    private var editsDuringSync = 0
 
     private fun log(msg: String) = Log.i(TAG, msg)
 
@@ -119,15 +121,20 @@ class HeadsetRepository(
             s.open()
             if (session !== s) return s.close()
             s.onPush = { frame -> onPush(frame) }
-            val headset = s.readAll()
+            editsDuringSync = 0
+            var headset = s.readCore(cached?.modes.orEmpty())
+            // Taps made while syncing already reached the headset, but the reads above may predate them.
+            if (editsDuringSync > 0) s.readEditable().forEach { headset = headset.apply(it) }
             watchdog.cancel()
             if (session !== s || !s.isOpen) throw java.io.IOException("link lost while reading")
             s.onClosed = { scope.launch { onSessionClosed(s) } }
             _state.value = ConnectionState.Connected(headset)
             prefs.saveHeadset(headset)
             headset.battery?.let(onBattery)
-            active = this
-            sessionJob = scope.launch { maintain(s) }
+            sessionJob = scope.launch {
+                refreshModes(s)
+                maintain(s)
+            }
         } catch (e: Exception) {
             watchdog.cancel()
             log("connect attempt $attempt failed: ${e.message}")
@@ -143,6 +150,14 @@ class HeadsetRepository(
                 idle("Couldn't reach the headphones. Make sure they're on and nearby.")
             }
         }
+    }
+
+    /** Mode names rarely change, so the cached ones are shown first and refreshed in the background. */
+    private suspend fun refreshModes(s: HeadsetSession) {
+        val modes = runCatching { s.readModes() }.getOrNull()?.takeIf { it.isNotEmpty() } ?: return
+        if (session !== s) return
+        edit { it.copy(modes = modes) }
+        (_state.value as? ConnectionState.Connected)?.let { prefs.saveHeadset(it.headset) }
     }
 
     private suspend fun maintain(s: HeadsetSession) {
@@ -171,7 +186,6 @@ class HeadsetRepository(
         session?.let { it.onClosed = null; it.close() }
         session = null
         BatteryCheckJob.appConnected = false
-        if (active === this) active = null
         prefs.touch()
     }
 
@@ -182,6 +196,7 @@ class HeadsetRepository(
     }
 
     private fun edit(transform: (Headset) -> Headset) {
+        if ((_state.value as? ConnectionState.Connected)?.syncing == true) editsDuringSync++
         _state.update { st -> if (st is ConnectionState.Connected) st.copy(headset = transform(st.headset)) else st }
     }
 
@@ -195,10 +210,16 @@ class HeadsetRepository(
         }
     }
 
-    /** True when this repository holds a live link that a widget tap can reuse. */
-    val isLinked: Boolean get() = session != null && active === this
+    /** Opens the link if needed (widget taps); commands sent right after queue behind the connect. */
+    suspend fun ensureLinked(): Boolean {
+        if (session != null) return true
+        val device = devices.connected() ?: return false
+        if (session == null) scope.launch(start = CoroutineStart.UNDISPATCHED) { connect(device) }
+        return session != null
+    }
 
     fun setMode(index: Int) {
+        editsDuringSync++
         edit { it.copy(currentMode = index) }
         val s = session ?: return
         scope.launch {
@@ -225,10 +246,4 @@ class HeadsetRepository(
     fun setAutoPause(on: Boolean) = write({ it.copy(autoPause = on) }) { it.setAutoPause(on) }
 
     fun rename(name: String) = write({ it.copy(name = name) }) { it.rename(name) }
-
-    companion object {
-        /** The repository currently holding the RFCOMM link, so widgets don't open a second one. */
-        @Volatile var active: HeadsetRepository? = null
-            private set
-    }
 }
