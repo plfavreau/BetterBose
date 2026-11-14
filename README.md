@@ -6,7 +6,7 @@
 
 <p align="center">
   A fast, quiet Android app for the Bose QC Ultra Headphones.<br>
-  No account, no internet, no waiting.
+  Works without a Bose account and offline.
 </p>
 
 <p align="center">
@@ -14,7 +14,10 @@
 </p>
 
 <p align="center">
-  <img src="docs/images/screens.png" alt="BetterBose screens">
+  <img src="docs/images/screens-1.png" width="600" alt="Home screen and settings">
+</p>
+<p align="center">
+  <img src="docs/images/screens-2.png" width="600" alt="Low battery and headphone settings">
 </p>
 
 ## Why
@@ -24,9 +27,10 @@ The official Bose app kept letting me down:
 - **Stuck on the splash screen**, or an **empty home screen** with no headphones on it.
 - A **background Bluetooth scan that never stopped**. Mine had been running for 15 days straight, finding devices nobody asked for.
 - **Slow to open**, with every setting buried a few taps deep.
+- **A Bose account and an internet connection** just to change a setting on headphones sitting on your head.
 - **No widgets** and **no low battery warning**.
 
-BetterBose talks to the headphones directly over Bluetooth and does only that.
+A companion app this simple needs none of that. BetterBose talks to the headphones directly over Bluetooth and does only that.
 
 ## What it does
 
@@ -66,6 +70,8 @@ Built with Kotlin, Jetpack Compose and Glance. Thanks to the people who mapped t
 ```sh
 ./gradlew assembleRelease
 ```
+
+Working with an AI agent? [AGENTS.md](AGENTS.md) has the essentials, and `.opencode/skills/` has two skills: **build** (build, install, demo data) and **release** (version bump, signed APK, GitHub release).
 
 Without a signing key configured (`BETTERBOSE_STORE_FILE`, `BETTERBOSE_STORE_PASSWORD`, `BETTERBOSE_KEY_ALIAS` in `~/.gradle/gradle.properties`), the release build is signed with your debug key.
 
