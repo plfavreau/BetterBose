@@ -16,8 +16,28 @@ android {
         versionName = "1.0.1"
     }
 
+    // Release key lives outside the repo (~/.gradle/gradle.properties); without it builds stay debug-signed.
+    val storeFilePath = findProperty("BETTERBOSE_STORE_FILE") as String?
+    val release = storeFilePath?.let {
+        signingConfigs.create("release") {
+            storeFile = file(it)
+            storePassword = findProperty("BETTERBOSE_STORE_PASSWORD") as String
+            keyAlias = findProperty("BETTERBOSE_KEY_ALIAS") as String
+            keyPassword = storePassword
+        }
+    }
+
     buildTypes {
-        debug { isMinifyEnabled = false }
+        debug {
+            isMinifyEnabled = false
+            release?.let { signingConfig = it }
+        }
+        getByName("release") {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"))
+            signingConfig = release ?: signingConfigs.getByName("debug")
+        }
     }
     buildFeatures { compose = true; buildConfig = true }
     compileOptions {
