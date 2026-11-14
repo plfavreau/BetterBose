@@ -71,8 +71,6 @@ Built with Kotlin, Jetpack Compose and Glance. Thanks to the people who mapped t
 ./gradlew assembleRelease
 ```
 
-Working with an AI agent? [AGENTS.md](AGENTS.md) has the essentials, and `.opencode/skills/` has two skills: **build** (build, install, demo data) and **release** (version bump, signed APK, GitHub release).
-
 Without a signing key configured (`BETTERBOSE_STORE_FILE`, `BETTERBOSE_STORE_PASSWORD`, `BETTERBOSE_KEY_ALIAS` in `~/.gradle/gradle.properties`), the release build is signed with your debug key.
 
 ---
